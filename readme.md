@@ -81,7 +81,7 @@ cd ChatGPT
 ```
 
 
-### 3. Set Up Environment Variables
+### 2. Set Up Environment Variables
 
 Create a `.env.local` file in the root of the project with the following content:
 ```
@@ -108,6 +108,12 @@ MONGODB_URI=your_mongodb_connection_string
 
 # Debug mode (optional)
 CLERK_DEBUG=true
+```
+
+### 3. Start development server
+
+```bash
+npm run dev
 ```
 
 
