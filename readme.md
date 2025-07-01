@@ -76,8 +76,8 @@ A robust, fullstack ChatGPT clone built with modern tools and best practices. Th
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/chatgpt-clone.git
-cd chatgpt-clone
+https://github.com/x15sr71/ChatGPT.git
+cd ChatGPT
 ```
 
 
