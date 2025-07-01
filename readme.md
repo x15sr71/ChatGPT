@@ -79,9 +79,13 @@ A robust, fullstack ChatGPT clone built with modern tools and best practices. Th
 https://github.com/x15sr71/ChatGPT.git
 cd ChatGPT
 ```
+### 2. Install dependencies
 
+```bash
+npm install
+```
 
-### 2. Set Up Environment Variables
+### 3. Set Up Environment Variables
 
 Create a `.env.local` file in the root of the project with the following content:
 ```
@@ -110,7 +114,7 @@ MONGODB_URI=your_mongodb_connection_string
 CLERK_DEBUG=true
 ```
 
-### 3. Start development server
+### 4. Start development server
 
 ```bash
 npm run dev
