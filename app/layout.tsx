@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "ChatGPT",
   description: "ChatGPT UI Clone",
   generator: "v0.dev",
+  icons: {
+    icon: "/favicon.svg",
+  }
 }
 
 export default function RootLayout({
