@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "ChatGPT UI Clone",
   generator: "v0.dev",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.png",
   }
 }
 

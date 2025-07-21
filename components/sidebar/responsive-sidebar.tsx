@@ -10,11 +10,11 @@ import {
   Library,
   Sparkles,
   Bot,
-  X,
   PanelLeft,
   Trash,
   Pencil,
   Menu,
+  X,
 } from "lucide-react";
 import type { Chat } from "@/hooks/use-chat";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
@@ -49,6 +49,7 @@ export function ResponsiveSidebar({
   onRenameChat,
 }: SidebarProps) {
   const focusTrapRef = useFocusTrap(isMobile && isOpen);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (!isMobile || !isOpen) return;
@@ -89,16 +90,13 @@ export function ResponsiveSidebar({
         alert("Title must be 4 words or fewer.");
         return;
       }
-
       try {
         const res = await fetch(`/api/chats/${chat.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: newTitle.trim() }),
         });
-
         if (!res.ok) throw new Error("Rename failed");
-
         onRenameChat(chat.id, newTitle.trim());
         setIsEditing(false);
       } catch (err) {
@@ -147,7 +145,6 @@ export function ResponsiveSidebar({
             </div>
           )}
         </div>
-
         {!isEditing && (
           <div className="flex items-center gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
@@ -177,10 +174,20 @@ export function ResponsiveSidebar({
     );
   };
 
+  const showMobileMenuButton = isMobile && !isOpen;
+
+  const MobileBackdrop =
+    isMobile && isOpen ? (
+      <div
+        className="fixed inset-0 bg-black/40 z-40 transition-opacity duration-300"
+        onClick={onClose}
+        aria-label="Close sidebar backdrop"
+      />
+    ) : null;
+
   return (
     <>
-      {/* Desktop reopen button - styled to match original ChatGPT */}
-      {!isOpen && !isMobile && (
+      {showMobileMenuButton && (
         <Button
           variant="ghost"
           size="icon"
@@ -192,67 +199,106 @@ export function ResponsiveSidebar({
         </Button>
       )}
 
+      {MobileBackdrop}
+
       <div
         className={cn(
-          "bg-[#171717] border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out relative w-auto",
-          "fixed md:relative z-50 h-full left-0 top-0",
-          !isOpen && "hidden"
+          "border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out fixed md:relative z-50 h-full left-0 top-0",
+          // Dynamic background color based on collapsed state
+          !isMobile && isCollapsed ? "bg-[#212121]" : "bg-[#171717]",
+          isMobile
+            ? isOpen
+              ? "w-[270px] shadow-2xl translate-x-0"
+              : "w-[270px] shadow-2xl -translate-x-full"
+            : isCollapsed
+            ? "w-[56px]"
+            : "w-[270px]"
         )}
         ref={focusTrapRef}
+        onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
       >
         <div
           className={cn(
             "flex items-center transition-all duration-300",
-            isCollapsed ? "p-3 justify-center" : "p-4 justify-between"
+            isMobile || !isCollapsed
+              ? "p-4 justify-between"
+              : "p-3 justify-center"
           )}
         >
-<div className="flex items-center gap-3 relative">
-  <img
-    src="https://chatgpt.com/images/chatgpt-icon-144x144.png"
-    alt="ChatGPT Logo"
-    className="w-6 h-6 rounded-sm flex-shrink-0"
-  />
-  {!isCollapsed && (
-    <h1 className="text-lg font-semibold text-white whitespace-nowrap">
-      ChatGPT
-    </h1>
-  )}
-</div>
-
-
-          {!isCollapsed && (
-            <div className="flex gap-2">
+          {isMobile ? (
+            <>
+              {/* Mobile View: Always expanded-like */}
+              <img
+                src="https://img.icons8.com/ios/50/FFFFFF/chatgpt.png" // Correct Path
+                alt="Logo"
+                className="w-6 h-6 flex-shrink-0"
+              />
               <Button
                 variant="ghost"
                 size="icon"
                 className="text-white/70 hover:text-white hover:bg-white/10 h-8 w-8"
-                onClick={onToggle}
+                onClick={onClose}
                 aria-label="Close sidebar"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </>
+          ) : !isCollapsed ? (
+            <>
+              {/* Desktop Expanded View */}
+              <img
+                src="https://img.icons8.com/ios/50/FFFFFF/chatgpt.png" // Correct Path
+                alt="Logo"
+                className="w-6 h-6 flex-shrink-0"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white/70 hover:text-white hover:bg-white/10 h-8 w-8"
+                onClick={onToggleCollapse}
+                aria-label="Collapse sidebar"
               >
                 <PanelLeft className="h-4 w-4" />
               </Button>
-            </div>
+            </>
+          ) : isHovered ? (
+            // Desktop Collapsed + Hovered: Show button
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white/70 hover:text-white hover:bg-white/10 h-8 w-8"
+              onClick={onToggleCollapse}
+              aria-label="Open sidebar"
+            >
+              <PanelLeft className="h-4 w-4" />
+            </Button>
+          ) : (
+            // Desktop Collapsed + Not Hovered: Show logo
+            <img
+              src="https://img.icons8.com/ios/50/FFFFFF/chatgpt.png" // Correct Path
+              alt="Logo"
+              className="w-6 h-6 flex-shrink-0"
+            />
           )}
         </div>
 
-        {!isCollapsed && (
-          <div className="flex flex-col p-2">
-            {[...mainItems, ...topItems].map((item) => (
-              <Button
-                key={item.id}
-                variant="ghost"
-                onClick={item.onClick}
-                className="h-10 justify-start gap-3 mb-1 px-3 text-white/70 hover:text-white hover:bg-white/10"
-              >
-                <item.icon className="h-5 w-5" />
-                <span className="text-sm font-medium">{item.label}</span>
-              </Button>
-            ))}
-          </div>
-        )}
-
-        {!isCollapsed && (
+        {/* Sidebar MAIN CONTENT */}
+        {(!isCollapsed || isMobile) && (
           <>
+            <div className="flex flex-col p-2">
+              {[...mainItems, ...topItems].map((item) => (
+                <Button
+                  key={item.id}
+                  variant="ghost"
+                  onClick={item.onClick}
+                  className="h-10 justify-start gap-3 mb-1 px-3 text-white/70 hover:text-white hover:bg-white/10"
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </Button>
+              ))}
+            </div>
             <div className="px-4 mt-2 mb-1 text-xs font-medium text-white/50 uppercase">
               Chats
             </div>
@@ -263,23 +309,20 @@ export function ResponsiveSidebar({
                 ))}
               </div>
             </ScrollArea>
-          </>
-        )}
-
-        {!isCollapsed && (
-          <div className="p-3 border-t border-white/10 mt-auto">
-            <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-white/70 hover:text-white hover:bg-white/10 rounded-lg">
-              <div className="w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-xs font-bold text-white">
-                U
-              </div>
-              <div className="flex-1 min-w-0">
-                <span className="text-xs font-medium">Upgrade plan</span>
-                <div className="text-xs text-white/40">
-                  More access to the best models
+            <div className="p-3 border-t border-white/10 mt-auto">
+              <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-white/70 hover:text-white hover:bg-white/10 rounded-lg">
+                <div className="w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                  U
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium">Upgrade plan</span>
+                  <div className="text-xs text-white/40">
+                    More access to the best models
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </>

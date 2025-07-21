@@ -12,9 +12,18 @@ import {
   Settings,
   X,
   FileText,
+  Image,
+  Code,
+  Globe,
+  PenTool,
+  ChevronUp,
+  Brain,
+  Search,
+  Palette,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMobile } from "@/hooks/use-mobile";
+import { useState, useEffect, useRef } from "react";
 
 interface Attachment {
   preview: string;
@@ -53,6 +62,42 @@ export function EnhancedInput({
   onRemoveAttachment,
 }: EnhancedInputProps) {
   const isMobile = useMobile();
+  const [showToolsMenu, setShowToolsMenu] = useState(false);
+  const [showAddMenu, setShowAddMenu] = useState(false);
+  const toolsMenuRef = useRef<HTMLDivElement>(null);
+  const addMenuRef = useRef<HTMLDivElement>(null);
+  const toolsButtonRef = useRef<HTMLButtonElement>(null);
+  const addButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showToolsMenu &&
+        toolsMenuRef.current &&
+        toolsButtonRef.current &&
+        !toolsMenuRef.current.contains(event.target as Node) &&
+        !toolsButtonRef.current.contains(event.target as Node)
+      ) {
+        setShowToolsMenu(false);
+      }
+
+      if (
+        showAddMenu &&
+        addMenuRef.current &&
+        addButtonRef.current &&
+        !addMenuRef.current.contains(event.target as Node) &&
+        !addButtonRef.current.contains(event.target as Node)
+      ) {
+        setShowAddMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showToolsMenu, showAddMenu]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -75,7 +120,7 @@ export function EnhancedInput({
       <div
         className={cn(
           variant === "bottom"
-            ? "max-w-4xl mx-auto"
+            ? "max-w-4xl mx-auto relative"
             : "relative max-w-3xl mx-auto w-full space-y-4"
         )}
       >
@@ -112,19 +157,83 @@ export function EnhancedInput({
           </div>
         )}
 
-        <div className="bg-white/10 border border-white/20 rounded-3xl p-3 sm:p-4 flex items-end gap-2 sm:gap-3 shadow-lg min-h-[56px]">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white/50 hover:text-white hover:bg-white/10 h-8 w-8 flex-shrink-0 self-end mb-1"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {variant === "bottom" ? (
-              <Paperclip className="h-4 w-4" />
-            ) : (
+        <div className="bg-[#414141] border border-white/20 rounded-3xl shadow-lg min-h-[56px] relative">
+          {/* Main input area */}
+          <div className="p-3 sm:p-4 flex items-end gap-2 sm:gap-3">
+            <div className="flex-1 relative min-h-[24px] max-h-[200px]">
+              <AutoResizeTextarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => onInputChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={hasMessages ? "Message ChatGPT" : "Ask anything"}
+                className="bg-transparent border-0 text-white placeholder:text-white/50 focus-visible:ring-0 text-base leading-6 pr-20"
+                rows={1}
+              />
+            </div>
+
+            <div className="flex items-center gap-2 flex-shrink-0 self-end">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white/50 hover:text-white hover:bg-white/10 h-8 w-8"
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
+
+              <Button
+                onClick={handleClick}
+                disabled={!isTyping && !input.trim()}
+                size="icon"
+                className={cn(
+                  "h-8 w-8 rounded-full transition-all duration-200",
+                  isTyping
+                    ? "bg-red-500 text-white hover:bg-red-600"
+                    : input.trim()
+                    ? "bg-white text-black hover:bg-white/90 shadow-md"
+                    : "bg-white/10 text-white/30 cursor-not-allowed"
+                )}
+              >
+                {isTyping ? <Square className="h-4 w-4" /> : <Send className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+
+          {/* Bottom buttons row */}
+          <div className="px-4 pb-3 flex items-center gap-2">
+            <Button
+              ref={addButtonRef}
+              variant="ghost"
+              size="icon"
+              className="text-white/50 hover:text-white hover:bg-white/10 h-8 w-8 flex-shrink-0"
+              onClick={() => {
+                if (variant === "bottom") {
+                  setShowAddMenu(!showAddMenu);
+                  setShowToolsMenu(false);
+                } else {
+                  fileInputRef.current?.click();
+                }
+              }}
+            >
               <Plus className="h-4 w-4" />
+            </Button>
+
+            {showTools && (
+              <Button
+                ref={toolsButtonRef}
+                variant="ghost"
+                size="sm"
+                className="text-white/70 hover:text-white hover:bg-white/10 gap-2 h-8 px-3 rounded-lg"
+                onClick={() => {
+                  setShowToolsMenu(!showToolsMenu);
+                  setShowAddMenu(false);
+                }}
+              >
+                <Settings className="h-4 w-4" />
+                Tools
+              </Button>
             )}
-          </Button>
+          </div>
 
           <input
             ref={fileInputRef}
@@ -133,60 +242,103 @@ export function EnhancedInput({
             onChange={onFileUpload}
             accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx,.txt"
           />
+        </div>
 
-          <div className="flex-1 mb-2 relative min-h-[24px] max-h-[200px]">
-            <AutoResizeTextarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => onInputChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={hasMessages ? "Message ChatGPT" : "Ask anything"}
-              className="bg-transparent border-0 text-white placeholder:text-white/50 focus-visible:ring-0 text-base leading-6"
-              rows={1}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 flex-shrink-0 self-end mb-1">
-            {showTools && (
+        {/* Tools Menu Dropdown - positioned below input box */}
+        {showToolsMenu && (
+          <div
+            ref={toolsMenuRef}
+            className={cn(
+              "absolute left-4 bg-[#2f2f2f] border border-white/20 rounded-2xl p-2 shadow-xl z-50",
+              isMobile 
+                ? "w-[calc(100%-2rem)] min-w-[280px]" 
+                : "min-w-[220px] max-w-[280px]"
+            )}
+            style={{ top: '100%', marginTop: '8px' }}
+          >
+            <div className="space-y-1">
               <Button
                 variant="ghost"
-                size="sm"
-                className="text-white/70 hover:text-white hover:bg-white/10 gap-2 h-8 hidden sm:flex"
+                className="w-full justify-start gap-3 text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => setShowToolsMenu(false)}
               >
-                {variant === "center" ? (
-                  <Settings className="h-4 w-4" />
-                ) : (
-                  <Plus className="h-4 w-4" />
-                )}
-                Tools
+                <Brain className="h-5 w-5 text-white/80" />
+                <span className="text-white/90">Think longer</span>
               </Button>
-            )}
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white/50 hover:text-white hover:bg-white/10 h-8 w-8"
-            >
-              <Mic className="h-4 w-4" />
-            </Button>
-
-            <Button
-              onClick={handleClick}
-              disabled={!isTyping && !input.trim()}
-              size="icon"
-              className={cn(
-                "h-8 w-8 rounded-full transition-all duration-200",
-                isTyping
-                  ? "bg-red-500 text-white hover:bg-red-600"
-                  : input.trim()
-                  ? "bg-white text-black hover:bg-white/90 shadow-md"
-                  : "bg-white/10 text-white/30 cursor-not-allowed"
-              )}
-            >
-              {isTyping ? <Square className="h-4 w-4" /> : <Send className="h-4 w-4" />}
-            </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => setShowToolsMenu(false)}
+              >
+                <Search className="h-5 w-5 text-white/80" />
+                <span className="text-white/90">Deep research</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => setShowToolsMenu(false)}
+              >
+                <Palette className="h-5 w-5 text-white/80" />
+                <span className="text-white/90">Create image</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => setShowToolsMenu(false)}
+              >
+                <Globe className="h-5 w-5 text-white/80" />
+                <span className="text-white/90">Web search</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => setShowToolsMenu(false)}
+              >
+                <PenTool className="h-5 w-5 text-white/80" />
+                <span className="text-white/90">Canvas</span>
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Add Menu Dropdown - positioned below input box */}
+        {showAddMenu && (
+          <div
+            ref={addMenuRef}
+            className={cn(
+              "absolute left-4 bg-[#2f2f2f] border border-white/20 rounded-2xl p-2 shadow-xl z-50",
+              isMobile 
+                ? "w-[calc(100%-2rem)] min-w-[280px]" 
+                : "min-w-[220px] max-w-[280px]"
+            )}
+            style={{ top: '100%', marginTop: '8px' }}
+          >
+            <div className="space-y-1">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-3 text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => {
+                  fileInputRef.current?.click();
+                  setShowAddMenu(false);
+                }}
+              >
+                <Paperclip className="h-5 w-5 text-white/80" />
+                <span className="text-white/90">Add photos & files</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-between text-white hover:bg-white/10 h-11 text-sm px-4 rounded-xl"
+                onClick={() => setShowAddMenu(false)}
+              >
+                <div className="flex items-center gap-3">
+                  <Code className="h-5 w-5 text-white/80" />
+                  <span className="text-white/90">Add from apps</span>
+                </div>
+                <ChevronUp className="h-4 w-4 text-white/60 rotate-90" />
+              </Button>
+            </div>
+          </div>
+        )}
 
         {!isMobile && (
           <p className="text-xs text-white/50 mt-2 text-center">
