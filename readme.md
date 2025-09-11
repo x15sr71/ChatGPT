@@ -37,7 +37,7 @@ A robust, fullstack ChatGPT clone built with modern tools and best practices. Th
 
 ### 🧠 AI Chat (Vercel AI SDK)
 - Real-time message streaming
-- Handles large context windows (trim/segment when needed)
+- Handles large context windows (trim or segment when needed)
 - Custom token management logic
 - Memory for multi-turn conversation context using **mem0**
 
