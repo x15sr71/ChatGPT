@@ -65,11 +65,6 @@ A robust, fullstack ChatGPT clone built with modern tools and best practices. Th
 - [x] README with setup instructions
 - [x] Clean and modular codebase with comments
 
----
-
-> ⚠️ **Note**: The UI is not pixel-perfect but is very close to the original ChatGPT experience. All intended functionalities and workflows are implemented with full parity.
----
-
 
 ## 🚀 Getting Started
 
