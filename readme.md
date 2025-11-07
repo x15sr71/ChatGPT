@@ -114,6 +114,9 @@ CLERK_DEBUG=true
 ```bash
 npm run dev
 ```
+## 🤝 Contribution
+Contributions are welcome! If you'd like to improve this project, feel free to fork the repo, create a branch, make your changes, and submit a pull request.
+
 
 
 
