@@ -84,7 +84,7 @@ npm install
 
 Create a `.env.local` file in the root of the project with the following content:
 ```
-# OpenAI & Memory API keys
+# OpenAI and Memory API keys
 OPENAI_API_KEY=your_openai_api_key
 MEM0_API_KEY=your_mem0_api_key
 
