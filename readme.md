@@ -31,7 +31,7 @@ A robust, fullstack ChatGPT clone built with modern tools and best practices. Th
 
 ### ✅ UI/UX
 - ChatGPT-style responsive chat interface
-- Clean layout with proper spacing, typography, and mobile behavior
+- Clean layout with proper spacing, typography & mobile behavior
 - Animations, modals, scroll behavior, and ARIA support
 - **Message editing** with automatic regeneration
 
