@@ -22,7 +22,7 @@ A robust, fullstack ChatGPT clone built with modern tools & best practices. The 
 | **Chat Memory**                  | `useMemo` for memory  |
 | **Backend**                      | Next.js API Routes (App Router)                 |
 | **Deployment**                   | Vercel                                          |
-| **Accessibility**                | ARIA roles and responsive design                |
+| **Accessibility**                | ARIA roles & responsive design                |
 | **File Types Supported**         | PNG, JPG, PDF, DOCX, TXT                        |
 
 ---
