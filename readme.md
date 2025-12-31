@@ -3,7 +3,7 @@
 ### 🚀 Vercel Deployment Link  - [ChatGPT](https://chatgpt-ui-back.vercel.app/)
 
 
-A robust, fullstack ChatGPT clone built with modern tools and best practices. The app replicates the original ChatGPT experience, including memory, file/image uploads, message editing, and seamless AI response handling through the Vercel AI SDK.
+A robust, fullstack ChatGPT clone built with modern tools & best practices. The app replicates the original ChatGPT experience, including memory, file/image uploads, message editing, and seamless AI response handling through the Vercel AI SDK.
 
 
 ---
