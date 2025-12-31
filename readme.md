@@ -32,7 +32,7 @@ A robust, fullstack ChatGPT clone built with modern tools & best practices. The 
 ### ✅ UI/UX
 - ChatGPT-style responsive chat interface
 - Clean layout with proper spacing, typography & mobile behavior
-- Animations, modals, scroll behavior, and ARIA support
+- Animations, modals, scroll behavior, & ARIA support
 - **Message editing** with automatic regeneration
 
 ### 🧠 AI Chat (Vercel AI SDK)
