@@ -5,7 +5,6 @@
 
 A robust, fullstack ChatGPT clone built with modern tools & best practices. The app replicates the original ChatGPT experience, including memory, file/image uploads, message editing, and seamless AI response handling through the Vercel AI SDK.
 
-
 ---
 
 ## 🧱 Tech Stack Used (Matches Original Requirements)
@@ -54,6 +53,55 @@ A robust, fullstack ChatGPT clone built with modern tools & best practices. The 
 - Modular code and scalable architecture
 
 ---
+
+## 📂 Project Structure
+
+```text
+ChatGPT/
+├── app/
+│   ├── api/                        # Backend API routes (App Router)
+│   │   ├── chat/                   # Chat streaming endpoint
+│   │   ├── chats/                  # Chat history CRUD
+│   │   ├── upload/                 # File upload handling (Cloudinary)
+│   │   └── webhook/                # External webhook integrations
+│   ├── layout.tsx                  # Root layout
+│   ├── page.tsx                    # Main chat UI
+│   ├── loading.tsx                 # Loading states
+│   └── globals.css                 # Global styles
+├── components/
+│   ├── chat/                       # Chat-specific UI (messages, input, typing)
+│   ├── sidebar/                    # Sidebar components
+│   ├── search/                     # Search UI (modal, etc.)
+│   ├── syntax-highlighter/         # Code rendering components
+│   ├── ui/                         # Reusable UI primitives (ShadCN)
+│   ├── header.tsx
+│   ├── enhanced-header.tsx
+│   ├── settings-modal.tsx
+│   ├── user-dropdown.tsx
+│   └── ...
+├── hooks/                          # Custom React hooks (chat, UI state, utils)
+├── lib/
+│   ├── db.ts                       # MongoDB connection
+│   ├── tokenizer.ts                # Token handling / trimming logic
+│   ├── uploadToCloudinary.ts       # File upload integration
+│   └── utils.ts                    # Helper utilities
+├── models/
+│   └── Chat.ts                     # Mongoose schema for chats
+├── public/
+│   └── favicon.png                 # Static assets
+├── styles/
+│   └── globals.css                 # Additional global styles
+├── middleware.ts                   # Next.js middleware (auth, routing)
+├── components.json                 # ShadCN config
+├── next.config.mjs
+├── tailwind.config.ts
+├── postcss.config.mjs
+├── package.json
+├── package-lock.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+└── README.md
+```
 
 ## 🚀 Getting Started
 
