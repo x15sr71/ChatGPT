@@ -7,7 +7,7 @@ A robust, fullstack ChatGPT clone built with modern tools & best practices. The 
 
 ---
 
-## 🧱 Tech Stack Used (Matches Original Requirements)
+## 🧱 Tech Stack Used
 
 | Requirement                      | Implemented Technology                          |
 |----------------------------------|--------------------------------------------------|
