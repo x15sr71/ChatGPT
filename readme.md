@@ -55,17 +55,6 @@ A robust, fullstack ChatGPT clone built with modern tools & best practices. The 
 
 ---
 
-## 📦 Deliverables Checklist
-
-- [x] Pixel-perfect (near) ChatGPT clone UI
-- [x] Fully functional chat using Vercel AI SDK
-- [x] Message editing, file/image upload, & memory context
-- [x] MongoDB and Cloudinary backend integration
-- [x] Deployed on Vercel
-- [x] README with setup instructions
-- [x] Clean and modular codebase with comments
-
-
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository
