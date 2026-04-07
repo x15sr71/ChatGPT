@@ -7,6 +7,39 @@ A robust, fullstack ChatGPT clone built with modern tools & best practices. The 
 
 ---
 
+## 📸 Screenshots
+
+> A glimpse into the ChatGPT-style application — built with Next.js, featuring authentication with Clerk, AI chat with image understanding, and persistent conversation memory.
+
+<p align="center">
+  <img src="assets/screenshots/landing.png" width="800"/>
+</p>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="assets/screenshots/memory.png" width="400"/><br/>
+      <b>Persistent AI Memory</b>
+    </td>
+    <td align="center">
+      <img src="assets/screenshots/chat.png" width="400"/><br/>
+      <b>AI Chat with Image Understanding</b>
+    </td>
+  </tr>
+</table>
+
+<details>
+<summary>▶️ View more screens</summary>
+
+<br>
+
+<p align="center">
+  <img src="assets/screenshots/auth.png" width="800"/><br/>
+  <b>Authentication with Clerk</b>
+</p>
+
+</details>
+
 ## 🧱 Tech Stack Used
 
 | Requirement                      | Implemented Technology                          |
